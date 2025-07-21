@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: sps-service  # Your service name
+    name: sps-service
     env: go
-    region: oregon  # or choose your preferred region
+    region: oregon
     buildCommand: go build -o main
     startCommand: ./main
     envVars:
@@ -10,20 +10,23 @@ services:
       - key: DB_HOST
         value: 10.14.237.200
       - key: DB_PORT
-        value: "5435"  # Note: string value
+        value: "5435"
       - key: DB_USER
         value: postgres
       - key: DB_PASSWORD
-        sync: false  # Mark as non-sync for secrets
+        value: postgres  # For production, use Render's secrets instead
       - key: DB_NAME
         value: sps_service
       - key: DB_SSL_MODE
         value: disable
         
-      # JWT Configuration
+      # JWT Configuration (choose ONE approach below)
+      # Option 1: Let Render generate a value
       - key: JWT_SECRET
-        generateValue: true  # Let Render generate a secure one
-        sync: false
+        generateValue: true
+      # Option 2: Provide your own value (remove generateValue)
+      # - key: JWT_SECRET
+      #   value: Art4j4saSP5
         
       # Server Configuration
       - key: SERVER_PORT
@@ -36,10 +39,8 @@ services:
       # Client Credentials
       - key: CLIENT_KEY
         value: 0cb92c12-4287-4255-b9a9-274bacd65668
-        sync: false
       - key: CLIENT_SECRET_KEY
         value: 5dcd3db9-97fb-49f9-ab3b-ed31a50ed2c3
-        sync: false
         
       # Proxy Configuration
       - key: PROXY_URL
@@ -49,12 +50,7 @@ services:
       - key: SPS_BASE_API
         value: https://devintegrationv2.skyparking.online
     
-    # Health check configuration
     healthCheckPath: /health
-    # Uncomment if you need custom port for health checks
-    # healthCheckPath: :8090/health
-    
-    # Scaling configuration (optional)
     scaling:
       minInstances: 1
       maxInstances: 2
