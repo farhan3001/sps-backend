@@ -37,7 +37,7 @@ services:
         
       # CORS Configuration
       - key: CORS
-        value: *
+        value: "*"
         
       # Client Credentials
       - key: CLIENT_KEY
@@ -46,8 +46,8 @@ services:
         value: 5dcd3db9-97fb-49f9-ab3b-ed31a50ed2c3
         
       # Proxy Configuration
-      - key: PROXY_URL
-        value: http://10.90.2.105:3128
+      # - key: PROXY_URL
+      #   value: http://10.90.2.105:3128
         
       # API Configuration
       - key: SPS_BASE_API

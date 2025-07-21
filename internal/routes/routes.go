@@ -20,7 +20,7 @@ func SetupRoutes(router *gin.Engine,
 		AllowMethods:     []string{"GET,POST,PUT,DELETE, OPTIONS"},
 		AllowHeaders:     []string{"Accept", "Content-Type", "Origin", "Authorization", "Cookie"},
 		ExposeHeaders:    []string{"Accept", "Content-Type", "Origin", "Authorization"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 	}))
 
 	// Public routes
