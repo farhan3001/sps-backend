@@ -34,7 +34,7 @@ services:
         
       # CORS Configuration
       - key: CORS
-        value: "http://localhost:5173, https://smart-parking-solution.vercel.app/"
+        value: "http://localhost:5173, https://smart-parking-solution.vercel.app"
         
       # Client Credentials
       - key: CLIENT_KEY
