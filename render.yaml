@@ -53,4 +53,4 @@ services:
       - key: SPS_BASE_API
         value: https://devintegrationv2.skyparking.online
     
-    healthCheckPath: /api/v1/health
+    healthCheckPath: /api/v1/home
