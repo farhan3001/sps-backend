@@ -1,0 +1,6 @@
+.env
+go.sum
+.vscode/launch.json
+banking-service/
+notes.txt
+migrations/002_dump_schema.out.sql
