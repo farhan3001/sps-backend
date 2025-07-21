@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"net/url"
 	"sps-backend/internal/clients"
 	"sps-backend/internal/config"
 	"sps-backend/internal/domain"
@@ -17,17 +16,17 @@ type ParkingServices struct {
 }
 
 func NewParkingService(parkingClient *clients.SPSClient, c *config.Config) *ParkingServices {
-	apiProxy, error := url.Parse(c.ProxyURL)
-	if error != nil {
-		return &ParkingServices{}
-	}
+	// apiProxy, error := url.Parse(c.ProxyURL)
+	// if error != nil {
+	// 	return &ParkingServices{}
+	// }
 	return &ParkingServices{
 		parkingClient: parkingClient,
 		httpClient: &http.Client{
 			Timeout: 60 * time.Second,
-			Transport: &http.Transport{
-				Proxy: http.ProxyURL(apiProxy),
-			},
+			// Transport: &http.Transport{
+			// 	Proxy: http.ProxyURL(apiProxy),
+			// },
 		},
 	}
 }
