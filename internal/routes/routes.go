@@ -10,6 +10,7 @@ import (
 
 func SetupRoutes(router *gin.Engine,
 	parkingController *controllers.ParkingController,
+	homeController *controllers.HomeController,
 	config *config.Config,
 ) {
 
@@ -26,6 +27,8 @@ func SetupRoutes(router *gin.Engine,
 	public := router.Group("/api/v1")
 	{
 		public.POST("/parking-inq", parkingController.ParkingInquiry)
+		public.GET("/", homeController.Home)
+		public.GET("/home", homeController.Health)
 	}
 
 	// Protected routes

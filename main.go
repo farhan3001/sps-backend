@@ -84,6 +84,7 @@ func main() {
 	// paymentController := controllers.NewPaymentController(paymentService)
 	// trxHistoryController := controllers.NewTransactionHistoryController(trxHistoryService)
 	spsController := controllers.NewParkingController(spsServices)
+	homeController := controllers.NewHomeController("")
 
 	// Initialize Gin router
 	// if !cfg.Debug {
@@ -94,7 +95,7 @@ func main() {
 	// router.Use(middleware.GlobalTimeoutMiddleware(15 * time.Second))
 
 	// Set up routes
-	routes.SetupRoutes(router, spsController, cfg)
+	routes.SetupRoutes(router, spsController, homeController, cfg)
 
 	// Configure HTTP server with timeouts
 	server := &http.Server{
