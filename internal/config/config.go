@@ -19,7 +19,7 @@ type Config struct {
 	ClientSecret string
 	SPSBaseURL   string
 	// ProxyURL     string
-	// Cors         string
+	Cors string
 	// SPSBaseURL2  string
 }
 
@@ -41,7 +41,7 @@ func LoadConfig() *Config {
 		ClientSecret: os.Getenv("CLIENT_SECRET_KEY"),
 		SPSBaseURL:   os.Getenv("SPS_BASE_API"),
 		// ProxyURL:     os.Getenv("PROXY_URL"),
-		// Cors: os.Getenv("CORS"),
+		Cors: os.Getenv("CORS"),
 		// SPSBaseURL2:  os.Getenv("SPS_BASE_API_2"),
 	}
 }
