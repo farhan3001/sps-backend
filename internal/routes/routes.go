@@ -4,6 +4,7 @@ import (
 	"sps-backend/internal/config"
 	"sps-backend/internal/controllers"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,14 +14,14 @@ func SetupRoutes(router *gin.Engine,
 	config *config.Config,
 ) {
 
-	// router.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     []string{config.Cors},
-	// 	MaxAge:           86400,
-	// 	AllowMethods:     []string{"GET,POST,PUT,DELETE, OPTIONS"},
-	// 	AllowHeaders:     []string{"Accept", "Content-Type", "Origin", "Authorization", "Cookie"},
-	// 	ExposeHeaders:    []string{"Accept", "Content-Type", "Origin", "Authorization"},
-	// 	AllowCredentials: true,
-	// }))
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{config.Cors},
+		MaxAge:           86400,
+		AllowMethods:     []string{"GET,POST,PUT,DELETE, OPTIONS"},
+		AllowHeaders:     []string{"Accept", "Content-Type", "Origin", "Authorization", "Cookie"},
+		ExposeHeaders:    []string{"Accept", "Content-Type", "Origin", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	// Public routes
 	public := router.Group("/api/v1")
