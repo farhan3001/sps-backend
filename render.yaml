@@ -51,7 +51,3 @@ services:
         value: https://devintegrationv2.skyparking.online
     
     healthCheckPath: /health
-    scaling:
-      minInstances: 1
-      maxInstances: 2
-      targetCPUPercent: 70
