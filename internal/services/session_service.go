@@ -33,7 +33,7 @@ func (s *SessionServices) GetTokenService(ctx context.Context, ipAddress string,
 		return nil, errors.New("X-TIMESTAMP tidak boleh kosong")
 	}
 
-	jwtToken, expTime, err := utils.MakeJWTUser(ipAddress, timeStamp, s.jwtSecret)
+	jwtToken, expTime, err := utils.MakeJWTSession(ipAddress, timeStamp, s.jwtSecret)
 	if err != nil {
 		return nil, err
 	}

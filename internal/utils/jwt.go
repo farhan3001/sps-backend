@@ -13,7 +13,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func MakeJWTUser(ipAddress string, timestamp string, jwtSecret string) (string, time.Time, error) {
+func MakeJWTSession(ipAddress string, timestamp string, jwtSecret string) (string, time.Time, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp":        time.Now().Add(time.Minute * 10).Unix(),
 		"ip_address": ipAddress,
@@ -58,10 +58,11 @@ func AuthenticateSession(cfg *config.Config) gin.HandlerFunc {
 
 func ValidateSession(tokenString string, jwtSecret string) (*domain.UserSession, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if token.Method != jwt.SigningMethodHS256 {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid token signature")
+		} else {
+			return []byte(jwtSecret), nil
 		}
-		return []byte(jwtSecret), nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("token validation failed: %w", err)
