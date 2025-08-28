@@ -81,12 +81,6 @@ func ValidateSession(tokenString string, jwtSecret string) (*domain.UserSession,
 		return nil, fmt.Errorf("token expired")
 	}
 
-	// Validate user_id
-	userID, ok := claims["user_id"].(string)
-	if !ok || userID == "" {
-		return nil, fmt.Errorf("invalid user ID")
-	}
-
 	// Populate UserSession with all available claims
 	return &domain.UserSession{
 		Timestamp: getStringClaim(claims, "timestamp"),
