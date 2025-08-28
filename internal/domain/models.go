@@ -67,12 +67,8 @@ type VehicleRegistration struct {
 }
 
 type UserSession struct {
-	Email     string    `json:"email"`
-	UserID    string    `json:"user_id"`
 	ExpiresAt time.Time `json:"expires_at"`
 	Token     string    `json:"token"`
 	IPAddress string    `json:"ip_address"`
-	Longitude float64   `json:"longitude"`
-	Latitude  float64   `json:"latitude"`
-	Location  string    `json:"location"`
+	Timestamp string    `json:"timestamp"`
 }

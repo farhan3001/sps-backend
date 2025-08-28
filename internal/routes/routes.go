@@ -29,6 +29,7 @@ func SetupRoutes(router *gin.Engine,
 	public := router.Group("/api/v1")
 	{
 		public.GET("/", homeController.Home)
+		public.GET("", homeController.Home)
 		public.GET("/home", homeController.Health)
 		public.GET("/get-token", sessionsController.GetToken)
 	}

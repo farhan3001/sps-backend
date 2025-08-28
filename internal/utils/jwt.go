@@ -44,7 +44,7 @@ func AuthenticateSession(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
-		session, err := ValidateSession(tokenString, cfg.JWTSecret)
+		_, err := ValidateSession(tokenString, cfg.JWTSecret)
 		if err != nil {
 			Error(ctx, http.StatusUnauthorized, gin.H{"message": err.Error()})
 			ctx.Abort()
@@ -52,7 +52,6 @@ func AuthenticateSession(cfg *config.Config) gin.HandlerFunc {
 		}
 
 		// Set user info in context
-		ctx.Set("user_id", session.UserID)
 		ctx.Next()
 	}
 }
@@ -90,43 +89,9 @@ func ValidateSession(tokenString string, jwtSecret string) (*domain.UserSession,
 
 	// Populate UserSession with all available claims
 	return &domain.UserSession{
-		UserID:    userID,
-		Email:     getStringClaim(claims, "email"),
-		Latitude:  getFloat64Claim(claims, "latitude"),
-		Longitude: getFloat64Claim(claims, "longitude"),
+		Timestamp: getStringClaim(claims, "timestamp"),
 		IPAddress: getStringClaim(claims, "ip_address"),
-		Location:  getStringClaim(claims, "location"),
 		ExpiresAt: time.Unix(int64(exp), 0),
-		Token:     tokenString,
-	}, nil
-}
-
-func GetClaims(tokenString string, jwtSecret string) (*domain.UserSession, error) {
-
-	fmt.Println(tokenString)
-
-	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("invalid token signature")
-		}
-		return []byte(jwtSecret), nil
-	})
-	// if err != nil {
-	// 	return nil, fmt.Errorf("token validation failed: %w", err)
-	// }
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return nil, fmt.Errorf("invalid token")
-	}
-
-	return &domain.UserSession{
-		UserID:    getStringClaim(claims, "user_id"),
-		Email:     getStringClaim(claims, "email"),
-		Latitude:  getFloat64Claim(claims, "latitude"),
-		Longitude: getFloat64Claim(claims, "longitude"),
-		IPAddress: getStringClaim(claims, "ip_address"),
-		Location:  getStringClaim(claims, "location"),
 		Token:     tokenString,
 	}, nil
 }
@@ -137,11 +102,4 @@ func getStringClaim(claims jwt.MapClaims, key string) string {
 		return val
 	}
 	return ""
-}
-
-func getFloat64Claim(claims jwt.MapClaims, key string) float64 {
-	if val, ok := claims[key].(float64); ok {
-		return val
-	}
-	return 0
 }
