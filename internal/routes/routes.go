@@ -28,7 +28,6 @@ func SetupRoutes(router *gin.Engine,
 	// Public routes
 	public := router.Group("/api/v1")
 	{
-		public.POST("/parking-inq", parkingController.ParkingInquiry)
 		public.GET("/", homeController.Home)
 		public.GET("/home", homeController.Health)
 		public.GET("/get-token", sessionsController.GetToken)
