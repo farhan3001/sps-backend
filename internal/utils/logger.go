@@ -60,17 +60,17 @@ func createLogger(baseDir, fileName string) *Logger {
 
 // Pre-configured loggers with your exact requested filenames
 func GetTransferLogger() *Logger {
-	return createLogger("banking-service/log/transfer", "log_file_transfer")
+	return createLogger("sps/log/transfer", "log_file_transfer")
 }
 
 func GetPaymentVALogger() *Logger {
-	return createLogger("banking-service/log/payment/va", "log_file_payment_va")
+	return createLogger("sps/log/payment/va", "log_file_payment_va")
 }
 
 func GetPaymentQRISLogger() *Logger {
-	return createLogger("banking-service/log/payment/qris", "log_file_payment_qris")
+	return createLogger("sps/log/payment/qris", "log_file_payment_qris")
 }
 
 func GetUserAuthLogger() *Logger {
-	return createLogger("banking-service/log/user_auth", "log_file_user_auth")
+	return createLogger("sps/log/user_auth", "log_file_user_auth")
 }
