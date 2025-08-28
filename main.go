@@ -76,7 +76,7 @@ func main() {
 	// paymentService := services.NewPaymentService(paymentRepo, accountRepo, fdsClient, authClient)
 	// trxHistoryService := services.NewTransactionHistoryService(trxHistoryRepo)
 	spsServices := services.NewParkingService(spsClient, cfg)
-	sesionServices := services.NewSessionService(cfg)
+	sesionServices := services.NewSessionService(cfg, cfg.JWTSecret)
 
 	// Initialize controllers
 	// userController := controllers.NewUserController(userService)

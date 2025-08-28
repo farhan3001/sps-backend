@@ -15,11 +15,12 @@ type SessionServices struct {
 	jwtSecret  string
 }
 
-func NewSessionService(c *config.Config) *SessionServices {
+func NewSessionService(c *config.Config, jwtSecret string) *SessionServices {
 	return &SessionServices{
 		httpClient: &http.Client{
 			Timeout: 60 * time.Second,
 		},
+		jwtSecret: jwtSecret,
 	}
 }
 

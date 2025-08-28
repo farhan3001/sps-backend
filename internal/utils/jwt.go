@@ -2,14 +2,10 @@ package utils
 
 import (
 	"fmt"
-	"net/http"
-	"strings"
 	"time"
 
-	"sps-backend/internal/config"
 	"sps-backend/internal/domain"
 
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -28,35 +24,8 @@ func MakeJWTSession(ipAddress string, timestamp string, jwtSecret string) (strin
 	return tokenString, time.Now().Add(time.Minute * 10), nil
 }
 
-func AuthenticateSession(cfg *config.Config) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		authHeader := ctx.GetHeader("Authorization")
-		if authHeader == "" {
-			Error(ctx, http.StatusUnauthorized, ErrUnauthorized)
-			ctx.Abort()
-			return
-		}
-
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-		if tokenString == authHeader {
-			Error(ctx, http.StatusUnauthorized, ErrUnauthorized)
-			ctx.Abort()
-			return
-		}
-
-		_, err := ValidateSession(tokenString, cfg.JWTSecret)
-		if err != nil {
-			Error(ctx, http.StatusUnauthorized, gin.H{"message": err.Error()})
-			ctx.Abort()
-			return
-		}
-
-		// Set user info in context
-		ctx.Next()
-	}
-}
-
 func ValidateSession(tokenString string, jwtSecret string) (*domain.UserSession, error) {
+
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("invalid token signature")

@@ -1,9 +1,12 @@
 package routes
 
 import (
+	"log"
+	"net/http"
 	"sps-backend/internal/config"
 	"sps-backend/internal/controllers"
 	"sps-backend/internal/utils"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -35,7 +38,7 @@ func SetupRoutes(router *gin.Engine,
 	}
 
 	protected := router.Group("/api/v1")
-	protected.Use(utils.AuthenticateSession(config))
+	protected.Use(AuthenticateSession(config))
 	{
 		// User routes
 		protected.POST("/parking-inq", parkingController.ParkingInquiry)
@@ -71,4 +74,32 @@ func SetupRoutes(router *gin.Engine,
 	// 	// Merchants
 	// 	protected.GET("/merchants", paymentController.GetMerchants) //
 	// }
+}
+
+func AuthenticateSession(cfg *config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		authHeader := ctx.GetHeader("Authorization")
+		if authHeader == "" {
+			utils.Error(ctx, http.StatusUnauthorized, utils.ErrUnauthorized)
+			ctx.Abort()
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		if tokenString == authHeader {
+			utils.Error(ctx, http.StatusUnauthorized, utils.ErrUnauthorized)
+			ctx.Abort()
+			return
+		}
+
+		session, err := utils.ValidateSession(tokenString, cfg.JWTSecret)
+		if err != nil {
+			utils.Error(ctx, http.StatusUnauthorized, gin.H{"message": err.Error()})
+			ctx.Abort()
+			return
+		}
+
+		log.Println(session)
+		ctx.Next()
+	}
 }
