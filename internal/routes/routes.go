@@ -3,6 +3,7 @@ package routes
 import (
 	"sps-backend/internal/config"
 	"sps-backend/internal/controllers"
+	"sps-backend/internal/utils"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 func SetupRoutes(router *gin.Engine,
 	parkingController *controllers.ParkingController,
 	homeController *controllers.HomeController,
+	sessionsController *controllers.SessionsController,
 	config *config.Config,
 ) {
 
@@ -29,6 +31,14 @@ func SetupRoutes(router *gin.Engine,
 		public.POST("/parking-inq", parkingController.ParkingInquiry)
 		public.GET("/", homeController.Home)
 		public.GET("/home", homeController.Health)
+		public.GET("/get-token", sessionsController.GetToken)
+	}
+
+	protected := router.Group("/api/v1")
+	protected.Use(utils.AuthenticateSession(config))
+	{
+		// User routes
+		protected.POST("/parking-inq", parkingController.ParkingInquiry)
 	}
 
 	// Protected routes

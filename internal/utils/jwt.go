@@ -2,22 +2,22 @@ package utils
 
 import (
 	"fmt"
+	"net/http"
+	"strings"
 	"time"
 
+	"sps-backend/internal/config"
 	"sps-backend/internal/domain"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
-func MakeJWTUser(userId string, email string, latitude float64, longitude float64, ipAddress string, location string, jwtSecret string) (string, time.Time, error) {
+func MakeJWTUser(ipAddress string, timestamp string, jwtSecret string) (string, time.Time, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id":    userId,
-		"email":      email,
 		"exp":        time.Now().Add(time.Minute * 10).Unix(),
-		"latitude":   latitude,
-		"longitude":  longitude,
 		"ip_address": ipAddress,
-		"location":   location,
+		"timestamp":  timestamp,
 	})
 
 	tokenString, err := token.SignedString([]byte(jwtSecret))
@@ -26,6 +26,35 @@ func MakeJWTUser(userId string, email string, latitude float64, longitude float6
 	}
 
 	return tokenString, time.Now().Add(time.Minute * 10), nil
+}
+
+func AuthenticateSession(cfg *config.Config) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		authHeader := ctx.GetHeader("Authorization")
+		if authHeader == "" {
+			Error(ctx, http.StatusUnauthorized, ErrUnauthorized)
+			ctx.Abort()
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		if tokenString == authHeader {
+			Error(ctx, http.StatusUnauthorized, ErrUnauthorized)
+			ctx.Abort()
+			return
+		}
+
+		session, err := ValidateSession(tokenString, cfg.JWTSecret)
+		if err != nil {
+			Error(ctx, http.StatusUnauthorized, gin.H{"message": err.Error()})
+			ctx.Abort()
+			return
+		}
+
+		// Set user info in context
+		ctx.Set("user_id", session.UserID)
+		ctx.Next()
+	}
 }
 
 func ValidateSession(tokenString string, jwtSecret string) (*domain.UserSession, error) {

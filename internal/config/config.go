@@ -13,7 +13,7 @@ type Config struct {
 	// DBUser       string
 	// DBPassword   string
 	// DBName       string
-	// JWTSecret    string
+	JWTSecret    string
 	ServerPort   string
 	ClientKey    string
 	ClientSecret string
@@ -35,7 +35,7 @@ func LoadConfig() *Config {
 		// DBUser:       os.Getenv("DB_USER"),
 		// DBPassword:   os.Getenv("DB_PASSWORD"),
 		// DBName:       os.Getenv("DB_NAME"),
-		// JWTSecret:    os.Getenv("JWT_SECRET"),
+		JWTSecret:    os.Getenv("JWT_SECRET"),
 		ServerPort:   os.Getenv("SERVER_PORT"),
 		ClientKey:    os.Getenv("CLIENT_KEY"),
 		ClientSecret: os.Getenv("CLIENT_SECRET_KEY"),

@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type ParkingInquiryResponse struct {
 	ResponseStatus  string         `json:"responseStatus"`
 	ResponseCode    string         `json:"responseCode"`
@@ -27,4 +29,9 @@ type ParkingLot struct {
 	MotorUsedLot   int `json:"MOTOR_USED_LOT"`
 	CarAvailable   int `json:"CAR_AVAILABLE"`
 	MotorAvailable int `json:"MOTOR_AVAILABLE"`
+}
+
+type GetTokenResponse struct {
+	Token     string    `json:"token"`
+	ExpiresAt time.Time `json:"expires_at"`
 }
